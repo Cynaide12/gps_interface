@@ -13,6 +13,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 )
 
 const (
@@ -60,6 +61,22 @@ func initRouter(cfg *config.Config, log *slog.Logger, storage *storage.Storage) 
 	r.Use(logger.New(log))
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.URLFormat)
+
+		r.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"http://*", "https://*", "https://47fc-185-77-216-6.ngrok-free.app"},
+		AllowedMethods: []string{
+			http.MethodHead,
+			http.MethodGet,
+			http.MethodPost,
+			http.MethodPut,
+			http.MethodPatch,
+			http.MethodDelete,
+		},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+		// MaxAge: 300,
+		Debug: true,
+	}))
 
 
 	srv := &http.Server{
