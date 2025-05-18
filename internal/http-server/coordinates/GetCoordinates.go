@@ -38,7 +38,7 @@ func GetCoordinates(log *slog.Logger, coordinatesHandler CoordinatesHandler) htt
 
 		render.JSON(w, r, CoordinatesResponse{
 			Response:     response.OK(),
-			coordinates: req,
+			Coordinates: req,
 		})
 	}
 }

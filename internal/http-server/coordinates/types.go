@@ -12,5 +12,5 @@ type CoordinatesHandler interface {
 
 type CoordinatesResponse struct{
 	response.Response
-	coordinates models.Coordinate
+	Coordinates models.Coordinate
 }
