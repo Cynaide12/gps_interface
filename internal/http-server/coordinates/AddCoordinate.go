@@ -11,7 +11,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func GetCoordinates(log *slog.Logger, coordinatesHandler CoordinatesHandler) http.HandlerFunc {
+func AddCoordinate(log *slog.Logger, coordinatesHandler CoordinatesHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const fn = "http-server.handlers.project.getProject"
 		log.With(slog.String("fn", fn))
@@ -35,17 +35,18 @@ func GetCoordinates(log *slog.Logger, coordinatesHandler CoordinatesHandler) htt
 			return
 		}
 
-		coordinates, err := coordinatesHandler.GetCoordinates()
-		if err != nil {
-			log.Error("failed to get coordinates", sl.Err(err))
+		newCoordinate, err := coordinatesHandler.AddCoordinate(req)
+		if err != nil{
+			log.Error("failed to add coordinate", sl.Err(err))
 			w.WriteHeader(http.StatusInternalServerError)
-			render.JSON(w, r, response.Error("failed to get coordinates"))
+			render.JSON(w, r, response.Error("failed to add coordinate"))
 			return
 		}
+		
 
-		render.JSON(w, r, CoordinatesResponse{
-			Response:    response.OK(),
-			Coordinates: coordinates,
+		render.JSON(w, r, CoordinateResponse{
+			Response:     response.OK(),
+			Coordinates: *newCoordinate,
 		})
 	}
 }

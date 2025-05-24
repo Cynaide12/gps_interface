@@ -50,3 +50,14 @@ func (s *Storage) GetCoordinates() ([]models.Coordinate, error) {
 	}
 	return coordinates, nil
 }
+
+
+
+func (s *Storage) AddCoordinate(coordinate models.Coordinate) (*models.Coordinate, error) {
+	const fn = "internal/storage/AddCoordinate"
+
+	if err := s.gormDB.Create(&coordinate).Error; err != nil {
+		return nil, fmt.Errorf("%s: %s", fn, err)
+	}
+	return &coordinate, nil
+}
