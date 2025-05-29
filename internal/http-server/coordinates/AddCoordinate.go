@@ -13,7 +13,7 @@ import (
 
 func AddCoordinate(log *slog.Logger, coordinatesHandler CoordinatesHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		const fn = "http-server.handlers.project.getProject"
+		const fn = "http-server.handlers.coordinates.AddCoordinate"
 		log.With(slog.String("fn", fn))
 
 		var req models.Coordinate
@@ -46,7 +46,7 @@ func AddCoordinate(log *slog.Logger, coordinatesHandler CoordinatesHandler) http
 
 		render.JSON(w, r, CoordinateResponse{
 			Response:     response.OK(),
-			Coordinates: *newCoordinate,
+			Coordinates: newCoordinate,
 		})
 	}
 }

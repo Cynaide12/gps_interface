@@ -51,7 +51,18 @@ func (s *Storage) GetCoordinates() ([]models.Coordinate, error) {
 	return coordinates, nil
 }
 
+func (s *Storage) GetLastCoordinates() (*models.Coordinate, error) {
+	const fn = "internal/storage/GetLastCoordinates"
 
+	var coordinates *models.Coordinate
+	if err := s.gormDB.Model(&models.Coordinate{}).First(&coordinates).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, models.ErrRecordNotFound
+		}
+		return nil, fmt.Errorf("%s: %s", fn, err)
+	}
+	return coordinates, nil
+}
 
 func (s *Storage) AddCoordinate(coordinate models.Coordinate) (*models.Coordinate, error) {
 	const fn = "internal/storage/AddCoordinate"

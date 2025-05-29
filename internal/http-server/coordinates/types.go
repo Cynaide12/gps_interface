@@ -7,12 +7,13 @@ import (
 
 type CoordinatesHandler interface {
 	GetCoordinates() ([]models.Coordinate, error)
+	GetLastCoordinates() (*models.Coordinate, error) 
 	AddCoordinate(coordinate models.Coordinate) (*models.Coordinate, error)
 }
 
 type CoordinateResponse struct {
 	response.Response
-	Coordinates models.Coordinate
+	Coordinates *models.Coordinate
 }
 
 type CoordinatesResponse struct {
