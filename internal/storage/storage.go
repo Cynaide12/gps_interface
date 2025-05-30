@@ -55,7 +55,7 @@ func (s *Storage) GetLastCoordinates() (*models.Coordinate, error) {
 	const fn = "internal/storage/GetLastCoordinates"
 
 	var coordinates *models.Coordinate
-	if err := s.gormDB.Model(&models.Coordinate{}).First(&coordinates).Error; err != nil {
+	if err := s.gormDB.Model(&models.Coordinate{}).Order("id DESC").First(&coordinates).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, models.ErrRecordNotFound
 		}
