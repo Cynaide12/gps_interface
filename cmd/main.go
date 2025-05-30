@@ -87,9 +87,9 @@ func initRouter(cfg *config.Config, log *slog.Logger, storage *storage.Storage) 
 		IdleTimeout:  cfg.HTTPServer.IdleTimeout,
 	}
 
-	r.Get("/api/get_coordinates", handlers_coordinates.GetCoordinates(log, storage))
-	r.Get("/api/get_last_coordinates", handlers_coordinates.GetLastCoordinates(log, storage))
-	r.Post("/add_coordinate", handlers_coordinates.AddCoordinate(log, storage))
+	r.Get("/api/v1/get_coordinates", handlers_coordinates.GetCoordinates(log, storage))
+	r.Get("/api/v1/get_last_coordinates", handlers_coordinates.GetLastCoordinates(log, storage))
+	r.Post("/api/v1/add_coordinate", handlers_coordinates.AddCoordinate(log, storage))
 
 	log.Info("starting server", slog.String("address", srv.Addr))
 
