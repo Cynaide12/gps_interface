@@ -9,6 +9,12 @@ type CoordinatesHandler interface {
 	GetCoordinates() ([]models.Coordinate, error)
 	GetLastCoordinates() (*models.Coordinate, error) 
 	AddCoordinate(coordinate models.Coordinate) (*models.Coordinate, error)
+	GetActiveGeofence() (*models.Geofence, error)
+	GetGeofences() ([]models.Geofence, error)
+	AddGeofence(geofence models.Geofence) (*models.Geofence, error) 
+	UpdateGeofence(geofence models.Geofence) (*models.Geofence, error)
+	DeleteGeofence(geofence models.Geofence) error
+	SetActiveGeofence(geofence models.Geofence) error 
 }
 
 type CoordinateResponse struct {
@@ -19,4 +25,14 @@ type CoordinateResponse struct {
 type CoordinatesResponse struct {
 	response.Response
 	Coordinates []models.Coordinate
+}
+
+type GeofencesResponse struct{
+	response.Response
+	Geofences []models.Geofence
+}
+
+type GeofenceResponse struct{
+	response.Response
+	Geofence *models.Geofence
 }

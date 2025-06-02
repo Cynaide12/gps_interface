@@ -62,7 +62,7 @@ func initRouter(cfg *config.Config, log *slog.Logger, storage *storage.Storage) 
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.URLFormat)
 
-		r.Use(cors.Handler(cors.Options{
+	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins: []string{"http://*", "https://*", "https://47fc-185-77-216-6.ngrok-free.app"},
 		AllowedMethods: []string{
 			http.MethodHead,
@@ -78,7 +78,6 @@ func initRouter(cfg *config.Config, log *slog.Logger, storage *storage.Storage) 
 		Debug: true,
 	}))
 
-
 	srv := &http.Server{
 		Addr:         cfg.HTTPServer.Address,
 		Handler:      r,
@@ -90,6 +89,11 @@ func initRouter(cfg *config.Config, log *slog.Logger, storage *storage.Storage) 
 	r.Get("/api/v1/get_coordinates", handlers_coordinates.GetCoordinates(log, storage))
 	r.Get("/api/v1/get_last_coordinates", handlers_coordinates.GetLastCoordinates(log, storage))
 	r.Post("/api/v1/add_coordinate", handlers_coordinates.AddCoordinate(log, storage))
+	r.Post("/api/v1/add_geofence", handlers_coordinates.AddGeofence(log, storage))
+	r.Get("/api/v1/get_geofences", handlers_coordinates.GetGeofences(log, storage))
+	r.Put("/api/v1/update_geofence", handlers_coordinates.UpdateGeofence(log, storage))
+	r.Put("/api/v1/set_active_geofence", handlers_coordinates.SetActiveGeofence(log, storage))
+	r.Post("/api/v1/delete_geofence", handlers_coordinates.DeleteGeofence(log, storage))
 
 	log.Info("starting server", slog.String("address", srv.Addr))
 
