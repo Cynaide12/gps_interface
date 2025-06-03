@@ -138,23 +138,17 @@ func (s Storage) GetActiveGeofence() (*models.Geofence, error) {
 	return geofence, nil
 }
 
-func (s Storage) GetConnectionQuality() string {
-	// Анализ последних 5 точек
-	var coordinates []models.Coordinate
-	s.gormDB.
+func (s Storage) IsDeviceOnline() bool {
+	var lastPos models.Coordinate
+	err := s.gormDB.
 		Order("created_at DESC").
-		Limit(5).
-		Find(&coordinates)
+		First(&lastPos).Error
 
-	if len(coordinates) < 3 {
-		return "poor"
+	if err != nil {
+		return false
 	}
 
-	avgInterval := coordinates[0].CreatedAt.Sub(coordinates[len(coordinates)-1].CreatedAt) /
-		time.Duration(len(coordinates))
-
-	if avgInterval > 25*time.Second {
-		return "unstable"
-	}
-	return "good"
+	// Считаем устройство онлайн, если координата обновлялась
+	// в последние 30 секунд (15*2 с запасом)
+	return time.Since(lastPos.CreatedAt) <= 30*time.Second
 }

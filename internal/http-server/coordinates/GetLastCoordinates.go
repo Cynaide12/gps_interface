@@ -38,7 +38,7 @@ func GetLastCoordinates(log *slog.Logger, coordinatesHandler CoordinatesHandler)
 			return
 		}
 
-		deviceStatus := coordinatesHandler.GetConnectionQuality()
+		deviceStatus := coordinatesHandler.IsDeviceOnline()
 
 
 		IsInsideGeofence := lib_geofence.IsInsideGeofence(coordinates.Latitude,
@@ -51,7 +51,7 @@ func GetLastCoordinates(log *slog.Logger, coordinatesHandler CoordinatesHandler)
 			Response:         response.OK(),
 			Coordinates:      coordinates,
 			IsInsideGeofence: IsInsideGeofence,
-			DeviceStatus:     deviceStatus,
+			IsOnline: deviceStatus,
 		})
 	}
 }

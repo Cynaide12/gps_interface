@@ -15,14 +15,14 @@ type CoordinatesHandler interface {
 	UpdateGeofence(geofence models.Geofence) (*models.Geofence, error)
 	DeleteGeofence(geofence models.Geofence) error
 	SetActiveGeofence(geofence models.Geofence) error
-	GetConnectionQuality() string 
+IsDeviceOnline() bool
 }
 
 type CoordinateResponse struct {
 	response.Response
 	Coordinates      *models.Coordinate
 	IsInsideGeofence bool `json:"is_inside_geofence"`
-	DeviceStatus         string `json:"device_status"`
+	IsOnline         bool `json:"is_online"`
 }
 
 type CoordinatesResponse struct {
@@ -39,3 +39,4 @@ type GeofenceResponse struct {
 	response.Response
 	Geofence *models.Geofence
 }
+
