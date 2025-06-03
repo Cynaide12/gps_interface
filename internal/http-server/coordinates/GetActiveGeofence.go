@@ -21,7 +21,6 @@ func GetActiveGeofence(log *slog.Logger, coordinatesHandler CoordinatesHandler) 
 			render.JSON(w, r, response.Error("failed to get geofence"))
 			return
 		}
-
 		render.JSON(w, r, GeofenceResponse{
 			Response:  response.OK(),
 			Geofence: geofence,

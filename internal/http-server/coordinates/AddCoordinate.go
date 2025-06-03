@@ -6,6 +6,7 @@ import (
 	"gps_backend/internal/models"
 	"log/slog"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/render"
 	"github.com/go-playground/validator/v10"
@@ -35,17 +36,18 @@ func AddCoordinate(log *slog.Logger, coordinatesHandler CoordinatesHandler) http
 			return
 		}
 
+		req.CreatedAt = time.Now()
+
 		newCoordinate, err := coordinatesHandler.AddCoordinate(req)
-		if err != nil{
+		if err != nil {
 			log.Error("failed to add coordinate", sl.Err(err))
 			w.WriteHeader(http.StatusInternalServerError)
 			render.JSON(w, r, response.Error("failed to add coordinate"))
 			return
 		}
-		
 
 		render.JSON(w, r, CoordinateResponse{
-			Response:     response.OK(),
+			Response:    response.OK(),
 			Coordinates: newCoordinate,
 		})
 	}

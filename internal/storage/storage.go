@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gps_backend/internal/config"
 	"gps_backend/internal/models"
+	"time"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -74,7 +75,6 @@ func (s *Storage) AddCoordinate(coordinate models.Coordinate) (*models.Coordinat
 	return &coordinate, nil
 }
 
-
 func (s *Storage) AddGeofence(geofence models.Geofence) (*models.Geofence, error) {
 	const fn = "internal/storage/AddGeofence"
 
@@ -136,4 +136,25 @@ func (s Storage) GetActiveGeofence() (*models.Geofence, error) {
 		return nil, fmt.Errorf("%s: %s", fn, err)
 	}
 	return geofence, nil
+}
+
+func (s Storage) GetConnectionQuality() string {
+	// Анализ последних 5 точек
+	var coordinates []models.Coordinate
+	s.gormDB.
+		Order("created_at DESC").
+		Limit(5).
+		Find(&coordinates)
+
+	if len(coordinates) < 3 {
+		return "poor"
+	}
+
+	avgInterval := coordinates[0].CreatedAt.Sub(coordinates[len(coordinates)-1].CreatedAt) /
+		time.Duration(len(coordinates))
+
+	if avgInterval > 25*time.Second {
+		return "unstable"
+	}
+	return "good"
 }

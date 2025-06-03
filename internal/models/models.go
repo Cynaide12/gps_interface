@@ -18,7 +18,7 @@ type Model struct {
 }
 
 type Coordinate struct {
-	ID         uint      `gorm:"primaryKey"`
+	Model
 	DeviceID   string    `gorm:"size:36;not null"` // Идентификатор устройства
 	Latitude   float64   `gorm:"type:decimal(10,6);not null"`
 	Longitude  float64   `gorm:"type:decimal(10,6);not null"`
