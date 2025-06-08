@@ -15,7 +15,7 @@ type CoordinatesHandler interface {
 	UpdateGeofence(geofence models.Geofence) (*models.Geofence, error)
 	DeleteGeofence(geofence models.Geofence) error
 	SetActiveGeofence(geofence models.Geofence) error
-IsDeviceOnline() bool
+	IsDeviceOnline() bool
 }
 
 type CoordinateResponse struct {
@@ -39,4 +39,3 @@ type GeofenceResponse struct {
 	response.Response
 	Geofence *models.Geofence
 }
-

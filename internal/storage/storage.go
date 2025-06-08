@@ -150,5 +150,5 @@ func (s Storage) IsDeviceOnline() bool {
 
 	// Считаем устройство онлайн, если координата обновлялась
 	// в последние 30 секунд (15*2 с запасом)
-	return time.Since(lastPos.CreatedAt) <= 30*time.Second
+	return time.Since(lastPos.CreatedAt) <= 50*time.Second
 }
