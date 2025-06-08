@@ -35,8 +35,6 @@ func AddGeofence(log *slog.Logger, coordinatesHandler CoordinatesHandler) http.H
 			return
 		}
 
-
-
 		newGeofence, err := coordinatesHandler.AddGeofence(req)
 		if err != nil {
 			log.Error("failed to add geofence", sl.Err(err))

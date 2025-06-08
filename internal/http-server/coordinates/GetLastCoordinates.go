@@ -25,33 +25,31 @@ func GetLastCoordinates(log *slog.Logger, coordinatesHandler CoordinatesHandler)
 		}
 
 		activeGeofence, err := coordinatesHandler.GetActiveGeofence()
-		if err != nil {
-			if err == models.ErrRecordNotFound {
-				log.Error("failed to get active geofence", sl.Err(err))
-				w.WriteHeader(http.StatusInternalServerError)
-				render.JSON(w, r, response.Error("failed to get active geofence"))
-				return
-			}
+		if err != nil && err != models.ErrRecordNotFound {
 			log.Error("failed to get active geofence", sl.Err(err))
 			w.WriteHeader(http.StatusInternalServerError)
 			render.JSON(w, r, response.Error("failed to get active geofence"))
 			return
 		}
 
+		var IsInsideGeofence bool
+
+		if activeGeofence != nil {
+
+			IsInsideGeofence = lib_geofence.IsInsideGeofence(coordinates.Latitude,
+				coordinates.Longitude,
+				activeGeofence.Latitude,
+				activeGeofence.Longitude,
+				activeGeofence.Radius)
+		}
+
 		deviceStatus := coordinatesHandler.IsDeviceOnline()
-
-
-		IsInsideGeofence := lib_geofence.IsInsideGeofence(coordinates.Latitude,
-			coordinates.Longitude,
-			activeGeofence.Latitude,
-			activeGeofence.Longitude,
-			activeGeofence.Radius)
 
 		render.JSON(w, r, CoordinateResponse{
 			Response:         response.OK(),
 			Coordinates:      coordinates,
 			IsInsideGeofence: IsInsideGeofence,
-			IsOnline: deviceStatus,
+			IsOnline:         deviceStatus,
 		})
 	}
 }
